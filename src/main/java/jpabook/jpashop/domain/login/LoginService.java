@@ -13,6 +13,6 @@ public class LoginService {
 
     public Member login(String name, String password) {
         return memberRepository.findByName(name)
-                .stream().filter(member -> member.getPass)
+                .stream().filter(member -> member.getPassword().equals(password)).findAny().orElse(null);
     }
 }
