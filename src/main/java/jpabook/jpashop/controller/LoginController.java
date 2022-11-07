@@ -27,13 +27,18 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("form") LoginForm form,
+    public String login(/*@Validated*/ @ModelAttribute("form") LoginForm form,
                         HttpServletRequest request, BindingResult result,
                         @RequestParam(defaultValue = "/") String redirectURL) {
+
+        log.warn(result.toString());
+
         if (result.hasErrors()) {
             log.info("login element error");
             return "/login/loginForm";
         }
+
+        log.warn(result.toString());
 
         Member loginMember = loginService.login(form.getName(), form.getPassword());
 

@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+    <a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=139febf9e13da4d124d1c1faafcf3f86&redirect_uri=http://localhost:8080/kakao&response_type=code">
+        <img th:src="@{/images/kakao_login_medium_narrow.png}" style="height:60px"/>
+    </a>
+    <div th:replace="fragments/footer :: footer" />
+
+</body>
+</html>
