@@ -15,6 +15,8 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    private Long kakaoId;
+
     private String name;
 
     private String password;

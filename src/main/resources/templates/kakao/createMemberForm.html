@@ -10,7 +10,10 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
 
-    <form role="form" action="/members/new" th:object="${memberForm}" method="post">
+    <form role="form" action="/kakao" th:object="${kakao_temp_form}" method="post">
+        <div class="form-group">
+            <label th:for="kakaoId">카카오 id 값</label>
+            <input type="text" th:field="*{kakaoId}" class="form-control" readonly="readonly"> </div>
         <div class="form-group">
             <label th:for="name">이름</label>
             <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요"

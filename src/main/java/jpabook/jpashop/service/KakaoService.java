@@ -1,5 +1,7 @@
 package jpabook.jpashop.service;
 
+import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.repository.MemberRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,10 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class KakaoService {
+
+    private final MemberRepository memberRepository;
 
     public String getToken(String code) throws IOException {
 
@@ -155,5 +160,15 @@ public class KakaoService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public Member distinguishKakaoId(Long kakaoId) {
+
+        if (!memberRepository.findByKakaoId(kakaoId).isPresent()) {
+            return null;
+        }
+        Member kakaoMember = memberRepository.findByKakaoId(kakaoId).get();
+
+        return kakaoMember;
     }
 }
