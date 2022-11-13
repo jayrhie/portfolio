@@ -23,7 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoController {
 
-    private final KakaoService ks;
+    private final KakaoService kakaoService;
     private final MemberService memberService;
 
     @GetMapping("/do")
@@ -33,9 +33,9 @@ public class KakaoController {
 
     @GetMapping("/kakao")
     public String kakaoLogin(@RequestParam String code, Model model, HttpServletRequest request) throws IOException {
-        log.debug("code = " + code);
-        String access_token = ks.getToken(code);
-        Map<String, Object> userInfo = ks.getUserInfo(access_token);
+        log.warn("code = {}", code);
+        String access_token = kakaoService.getToken(code);
+        Map<String, Object> userInfo = kakaoService.getUserInfo(access_token);
 
         /*model.addAttribute("code", code);
         model.addAttribute("access_token", access_token);
@@ -44,7 +44,7 @@ public class KakaoController {
         String nickname = (String) userInfo.get("nickname");
         Long kakaoId = Long.parseLong((String) userInfo.get("id"));
 
-        Member kakaoMember = ks.distinguishKakaoId(kakaoId);
+        Member kakaoMember = kakaoService.distinguishKakaoId(kakaoId);
 
         if (kakaoMember != null) {
             //로그인 성공 처리

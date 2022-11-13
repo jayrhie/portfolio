@@ -34,19 +34,22 @@ public class KakaoService {
 
         try {
             urlConnection.setRequestMethod("POST");
-            urlConnection.setDoOutput(true);
+            urlConnection.setDoOutput(true); // OutputStream으로 POST 데이터를 넘겨주겠다는 옵션
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
-            StringBuilder sb = new StringBuilder();sb.append("grant_type=authorization_code");
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
             sb.append("&client_id=139febf9e13da4d124d1c1faafcf3f86");
             sb.append("&redirect_uri=http://localhost:8080/kakao");
             sb.append("&code=" + code);
+            sb.append("&client_secret=5IueqXws75WoH1e3gCSI2aNxQgOGMdBG");
 
             bw.write(sb.toString());
+
             bw.flush();
 
             int responseCode = urlConnection.getResponseCode();
-            log.debug("responseCode = " + responseCode);
+            log.warn("responseCode = {}", responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
@@ -54,7 +57,7 @@ public class KakaoService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            log.debug("result = " + result);
+            log.warn("result = {}", result);
 
             // json parsing
             JSONParser parser = new JSONParser();
@@ -62,8 +65,8 @@ public class KakaoService {
 
             String access_token = elem.get("access_token").toString();
             String refresh_token = elem.get("refresh_token").toString();
-            log.debug("refresh_token = " + refresh_token);
-            log.debug("access_token = " + access_token);
+            log.warn("refresh_token = {}", refresh_token);
+            log.warn("access_token = {}", access_token);
 
             token = access_token;
 
@@ -90,7 +93,7 @@ public class KakaoService {
             urlConnection.setRequestMethod("GET");
 
             int responseCode = urlConnection.getResponseCode();
-            log.debug("responseCode = " + responseCode);
+            log.warn("responseCode = {}", responseCode);
 
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -101,14 +104,14 @@ public class KakaoService {
                 res+=line;
             }
 
-            log.debug("res = " + res);
-
+            log.warn("res = {}", res);
 
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(res);
             JSONObject kakao_account = (JSONObject) obj.get("kakao_account");
             JSONObject properties = (JSONObject) obj.get("properties");
 
+            log.warn("properties = {}", properties);
 
             String id = obj.get("id").toString();
             String nickname = properties.get("nickname").toString();
@@ -116,8 +119,9 @@ public class KakaoService {
             result.put("id", id);
             result.put("nickname", nickname);
 
-            log.debug("id = {}", id);
-            log.debug("nickname = {}", nickname);
+            log.warn("kakao_account = {}", kakao_account);
+            log.warn("id = {}", id);
+            log.warn("nickname = {}", nickname);
 
             br.close();
 
@@ -137,7 +141,7 @@ public class KakaoService {
             URL url = new URL(host);
             HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");
-            urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
+            urlConnection.setRequestProperty("Authorization", "Bearer " + access_token);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
@@ -147,9 +151,9 @@ public class KakaoService {
             }
 
             int responseCode = urlConnection.getResponseCode();
-            log.debug("responseCode = " + responseCode);
+            log.warn("responseCode = {}", responseCode);
 
-            // result is json format
+            // result는 json 포멧.
             br.close();
 
         } catch (MalformedURLException e) {

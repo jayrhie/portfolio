@@ -6,6 +6,18 @@ spring:
     driver-class-name: org.h2.Driver
   messages:
     basename: messages, errors
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id:
+            client-secret:
+            scope:
+              - profile_nickname
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/kakao
 
   jpa:
     hibernate:
