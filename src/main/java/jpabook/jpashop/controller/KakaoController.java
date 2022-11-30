@@ -33,7 +33,6 @@ public class KakaoController {
 
     @GetMapping("/kakao")
     public String kakaoLogin(@RequestParam String code, Model model, HttpServletRequest request) throws IOException {
-        log.warn("code = {}", code);
         String access_token = kakaoService.getToken(code);
         Map<String, Object> userInfo = kakaoService.getUserInfo(access_token);
 
@@ -81,8 +80,6 @@ public class KakaoController {
         member.setName(form.getName());
         member.setPassword(form.getPassword());
         member.setAddress(address);
-
-        log.warn("member = {}", member);
 
         memberService.join(member);
         return "redirect:/";

@@ -10,6 +10,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -49,7 +50,7 @@ public class KakaoService {
             bw.flush();
 
             int responseCode = urlConnection.getResponseCode();
-            log.warn("responseCode = {}", responseCode);
+            log.debug("responseCode = {}", responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
@@ -57,7 +58,6 @@ public class KakaoService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            log.warn("result = {}", result);
 
             // json parsing
             JSONParser parser = new JSONParser();
@@ -65,8 +65,6 @@ public class KakaoService {
 
             String access_token = elem.get("access_token").toString();
             String refresh_token = elem.get("refresh_token").toString();
-            log.warn("refresh_token = {}", refresh_token);
-            log.warn("access_token = {}", access_token);
 
             token = access_token;
 
@@ -93,8 +91,7 @@ public class KakaoService {
             urlConnection.setRequestMethod("GET");
 
             int responseCode = urlConnection.getResponseCode();
-            log.warn("responseCode = {}", responseCode);
-
+            log.debug("responseCode = {}", responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
@@ -104,24 +101,16 @@ public class KakaoService {
                 res+=line;
             }
 
-            log.warn("res = {}", res);
-
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(res);
-            JSONObject kakao_account = (JSONObject) obj.get("kakao_account");
+            /*JSONObject kakao_account = (JSONObject) obj.get("kakao_account");*/
             JSONObject properties = (JSONObject) obj.get("properties");
-
-            log.warn("properties = {}", properties);
 
             String id = obj.get("id").toString();
             String nickname = properties.get("nickname").toString();
 
             result.put("id", id);
             result.put("nickname", nickname);
-
-            log.warn("kakao_account = {}", kakao_account);
-            log.warn("id = {}", id);
-            log.warn("nickname = {}", nickname);
 
             br.close();
 
@@ -151,7 +140,7 @@ public class KakaoService {
             }
 
             int responseCode = urlConnection.getResponseCode();
-            log.warn("responseCode = {}", responseCode);
+            log.debug("responseCode = {}", responseCode);
 
             // result는 json 포멧.
             br.close();
